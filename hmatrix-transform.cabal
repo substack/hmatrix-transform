@@ -1,0 +1,10 @@
+Name:                hmatrix-transform
+Version:             0.0.1
+Description:         Transform hmatrix matrices for 3D programming.
+License:             BSD3
+Author:              James Halliday
+Maintainer:          substack@gmail.com
+Build-Depends:       base, hmatrix
+Exposed-modules:     Numeric.LinearAlgebra.Transform
+hs-source-dirs:      src
+Build-Type:          Simple
