@@ -1,5 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 module Numeric.LinearAlgebra.Transform (
+    Rotation(..),
     translate, translation, rotate, rotation, scaleMatrix
 ) where
 
