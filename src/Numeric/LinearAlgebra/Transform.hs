@@ -8,8 +8,7 @@ import Numeric.LinearAlgebra
 import Control.Arrow ((&&&))
 
 -- |Build a scale matrix in homogeneous coordinates
-scaleMatrix :: (Element e, Num (Matrix e), Linear Matrix e)
-     => Vector e -> Matrix e
+scaleMatrix :: Element e => Vector e -> Matrix e
 scaleMatrix v = diag $ join [v, fromList [1]]
 
 -- |Multiply a matrix with a translation, in that order.
@@ -18,13 +17,9 @@ translate :: (Element e, Num (Matrix e), Linear Matrix e)
 translate v m = m * (translation v)
 
 -- |Build a translation matrix in homogeneous coordinates.
-translation :: (Element e, Linear Matrix e) => Vector e -> Matrix e
-translation v = fromLists $ -- row major form
-    [ take (n + 1) $ drop i $ cycle $ 1 : replicate n 0 | i <- ii ]
-    ++ [ toList v ++ [1] ]
-    where
-        n = dim v
-        ii = [ n + 1, n .. 2 ]
+translation :: Element e => Vector e -> Matrix e
+translation v = takeColumns n (ident 4) <|> (asColumn v <-> (1 |> [1]))
+    where n = dim v
 
 -- |Specify the type of rotation for the rotation functions.
 -- All angles are in radians.
