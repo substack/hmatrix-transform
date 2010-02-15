@@ -10,7 +10,7 @@ import Control.Arrow ((&&&))
 -- |Multiply a matrix with a translation, in that order.
 translate :: (Element e, Num (Matrix e), Linear Matrix e)
     => Vector e -> Matrix e -> Matrix e
-translate v m = m * (translation v)
+translate v m = m <> (translation v)
 
 -- |Build a translation matrix in homogeneous coordinates.
 translation :: Element e => Vector e -> Matrix e
@@ -29,7 +29,7 @@ data (Num e, Num (Vector e)) => Rotation e
 -- |Multiply a matrix with a rotation, in that order.
 rotate :: (Num (Matrix e), Num (Vector e), Linear Matrix e) =>
     Rotation e -> Matrix e -> Matrix e
-rotate r m = m * (rotation r)
+rotate r m = m <> (rotation r)
 
 -- |Build a rotation matrix in homogeneous coordinates.
 rotation :: (Num (Vector e), Linear Matrix e) => Rotation e -> Matrix e
@@ -72,4 +72,4 @@ rotation (AxisZ a) =
         0, 0, 0, 1
     ] where (c,s) = cos &&& sin $ a
 rotation (YawPitchRoll x y z) =
-    (rotation $ AxisZ z) * (rotation $ AxisY y) * (rotation $ AxisX x)
+    (rotation $ AxisZ z) <> (rotation $ AxisY y) <> (rotation $ AxisX x)
