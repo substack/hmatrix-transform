@@ -1,15 +1,11 @@
 {-# LANGUAGE FlexibleContexts #-}
 module Numeric.LinearAlgebra.Transform (
     Rotation(..),
-    translate, translation, rotate, rotation, scaleMatrix
+    translate, translation, rotate, rotation
 ) where
 
 import Numeric.LinearAlgebra
 import Control.Arrow ((&&&))
-
--- |Build a scale matrix in homogeneous coordinates
-scaleMatrix :: Element e => Vector e -> Matrix e
-scaleMatrix v = diag $ join [v, fromList [1]]
 
 -- |Multiply a matrix with a translation, in that order.
 translate :: (Element e, Num (Matrix e), Linear Matrix e)
@@ -57,23 +53,23 @@ rotation (AxisAngle a axis) = case toList axis of
 rotation (AxisX a) =
     (4 >< 4) [
         1, 0, 0, 0,
-        0, cos a, - sin a, 0,
-        0, sin a, cos a, 0,
+        0, c, -s, 0,
+        0, s, c, 0,
         0, 0, 0, 1
-    ]
+    ] where (c,s) = cos &&& sin $ a
 rotation (AxisY a) =
     (4 >< 4) [
-        cos a, 0, sin a, 0,
+        c, 0, s, 0,
         0, 1, 0, 0,
-        - sin a, 0, cos a, 0,
+        -s, 0, c, 0,
         0, 0, 0, 1
-    ]
+    ] where (c,s) = cos &&& sin $ a
 rotation (AxisZ a) =
     (4 >< 4) [
-        cos a, - sin a, 0, 0,
-        sin a, cos a, 0, 0,
+        c, -s, 0, 0,
+        s, c, 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
-    ]
+    ] where (c,s) = cos &&& sin $ a
 rotation (YawPitchRoll x y z) =
     (rotation $ AxisZ z) * (rotation $ AxisY y) * (rotation $ AxisX x)
